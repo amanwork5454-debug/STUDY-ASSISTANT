@@ -7,34 +7,13 @@ from langchain_community.vectorstores import FAISS
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from langchain_groq import ChatGroq
-from langchain.embeddings.base import Embeddings
+from langchain_cohere import CohereEmbeddings
 from htmlTemplates import css, bot_template, user_template
-import numpy as np
-from typing import List
 
 load_dotenv()
 
-# ── Custom Hash-based Embeddings (no torch, no protobuf, works on Python 3.14) ──
-class GroqEmbeddings(Embeddings):
-    def _get_embedding(self, text: str) -> List[float]:
-        words = text.lower().split()
-        vec = np.zeros(384)
-        for i, word in enumerate(words):
-            idx = hash(word) % 384
-            vec[idx] += 1.0 / (i + 1)
-        norm = np.linalg.norm(vec)
-        if norm > 0:
-            vec = vec / norm
-        return vec.tolist()
 
-    def embed_documents(self, texts: List[str]) -> List[List[float]]:
-        return [self._get_embedding(t) for t in texts]
-
-    def embed_query(self, text: str) -> List[float]:
-        return self._get_embedding(text)
-
-
-# ── PDF Parsing ──────────────────────────────────────────────────────────────
+# ── PDF Parsing ───────────────────────────────────────────────────────────────
 def get_pdf_text(pdf_docs):
     text = ""
     for pdf in pdf_docs:
@@ -44,7 +23,7 @@ def get_pdf_text(pdf_docs):
     return text
 
 
-# ── Chunking ─────────────────────────────────────────────────────────────────
+# ── Chunking ──────────────────────────────────────────────────────────────────
 def get_text_chunks(text):
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=500,
@@ -53,9 +32,12 @@ def get_text_chunks(text):
     return splitter.split_text(text)
 
 
-# ── Vector Store ──────────────────────────────────────────────────────────────
+# ── Vector Store (Cohere real semantic embeddings — free, no torch) ───────────
 def get_vector_store(chunks):
-    embeddings = GroqEmbeddings()
+    embeddings = CohereEmbeddings(
+        model="embed-english-light-v3.0",
+        cohere_api_key=os.getenv("COHERE_API_KEY")
+    )
     return FAISS.from_texts(texts=chunks, embedding=embeddings)
 
 
@@ -85,9 +67,8 @@ def handle_user_input(question):
     if st.session_state.conversation is None:
         st.warning("Please upload and process your study materials first!")
         return
-    response = st.session_state.conversation({"question": question})
 
-    # Save full history internally for memory context
+    response = st.session_state.conversation({"question": question})
     st.session_state.chat_history = response["chat_history"]
 
     # Show only the latest Q&A (last 2 messages)
@@ -141,8 +122,6 @@ def main():
                     vectorstore = get_vector_store(chunks)
                     st.session_state.conversation = get_conversation_chain(vectorstore)
                 st.success(f"✅ {len(pdf_docs)} file(s) processed! Start asking questions.")
-
-
 
 
 if __name__ == "__main__":
