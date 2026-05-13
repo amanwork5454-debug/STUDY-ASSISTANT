@@ -86,8 +86,13 @@ def handle_user_input(question):
         st.warning("Please upload and process your study materials first!")
         return
     response = st.session_state.conversation({"question": question})
+
+    # Save full history internally for memory context
     st.session_state.chat_history = response["chat_history"]
-    for i, msg in enumerate(st.session_state.chat_history):
+
+    # Show only the latest Q&A (last 2 messages)
+    last_two = st.session_state.chat_history[-2:]
+    for i, msg in enumerate(last_two):
         if i % 2 == 0:
             st.write(user_template.replace("{{MSG}}", msg.content),
                      unsafe_allow_html=True)
@@ -137,15 +142,7 @@ def main():
                     st.session_state.conversation = get_conversation_chain(vectorstore)
                 st.success(f"✅ {len(pdf_docs)} file(s) processed! Start asking questions.")
 
-        st.markdown("---")
-        st.markdown("**💡 Try asking:**")
-        st.markdown("- What is the full form of BDA?")
-        st.markdown("- Summarize chapter 1")
-        st.markdown("- Explain MapReduce")
-        st.markdown("- Difference between OLAP and OLTP")
-        st.markdown("- Give me 5 MCQs on Hadoop")
-        st.markdown("---")
-        st.markdown("**🔧 Stack:** LangChain · FAISS · Groq LLaMA-3")
+
 
 
 if __name__ == "__main__":
