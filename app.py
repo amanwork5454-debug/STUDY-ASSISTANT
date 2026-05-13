@@ -7,7 +7,7 @@ from langchain_community.vectorstores import FAISS
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from langchain_groq import ChatGroq
-from langchain_community.embeddings import FakeEmbeddings
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from htmlTemplates import css, bot_template, user_template
 
 load_dotenv()
@@ -28,8 +28,10 @@ def get_text_chunks(text):
     return splitter.split_text(text)
 
 def get_vector_store(chunks):
-    # FakeEmbeddings works locally without torch/sentence-transformers
-    embeddings = FakeEmbeddings(size=768)
+    embeddings = GoogleGenerativeAIEmbeddings(
+        model="models/embedding-001",
+        google_api_key=os.getenv("GOOGLE_API_KEY")
+    )
     return FAISS.from_texts(texts=chunks, embedding=embeddings)
 
 def get_conversation_chain(vectorstore):
@@ -99,10 +101,10 @@ def main():
 
         st.markdown("---")
         st.markdown("**💡 Try asking:**")
-        st.markdown("- Explain the concept of X")
-        st.markdown("- Summarize chapter 3")
-        st.markdown("- What are the key differences between A and B?")
-        st.markdown("- Give me 5 MCQs on this topic")
+        st.markdown("- What is the full form of BDA?")
+        st.markdown("- Summarize chapter 1")
+        st.markdown("- Explain MapReduce")
+        st.markdown("- Give me 5 MCQs on Hadoop")
 
 if __name__ == "__main__":
     main()
