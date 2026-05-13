@@ -3,11 +3,11 @@ import streamlit as st
 from dotenv import load_dotenv
 from PyPDF2 import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from langchain_groq import ChatGroq
+from langchain_community.embeddings import FakeEmbeddings
 from htmlTemplates import css, bot_template, user_template
 
 load_dotenv()
@@ -28,16 +28,13 @@ def get_text_chunks(text):
     return splitter.split_text(text)
 
 def get_vector_store(chunks):
-    embeddings = HuggingFaceEmbeddings(
-        model_name="sentence-transformers/all-MiniLM-L6-v2",
-        model_kwargs={"device": "cpu"},
-        encode_kwargs={"normalize_embeddings": True}
-    )
+    # FakeEmbeddings works locally without torch/sentence-transformers
+    embeddings = FakeEmbeddings(size=768)
     return FAISS.from_texts(texts=chunks, embedding=embeddings)
 
 def get_conversation_chain(vectorstore):
     llm = ChatGroq(
-        model="llama3-8b-8192",      # ← fixed model name
+        model="llama3-8b-8192",
         api_key=os.getenv("GROQ_API_KEY"),
         temperature=0.2
     )
@@ -48,7 +45,7 @@ def get_conversation_chain(vectorstore):
     return ConversationalRetrievalChain.from_llm(
         llm=llm,
         retriever=vectorstore.as_retriever(
-            search_type="mmr",
+            search_type="similarity",
             search_kwargs={"k": 5}
         ),
         memory=memory
