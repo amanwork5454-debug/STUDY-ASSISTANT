@@ -134,12 +134,10 @@ study-assistant/
 
 ---
 
----
-
 ## 👤 Author
 
 **Aman** — [github.com/amanwork5454-debug](https://github.com/amanwork5454-debug)
 
 ---
 
-> *Built as part of a GenAI + RAG project portfolio*
+
