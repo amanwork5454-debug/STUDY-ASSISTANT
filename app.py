@@ -37,41 +37,21 @@ html, body, [data-testid="stAppViewContainer"] {
     border-right: 1px solid #1e1e2e !important;
 }
 
-/* ── Hide Streamlit chrome — keep header visible for sidebar toggle ── */
+/* ── Hide only footer and menu, keep header for sidebar toggle ── */
 #MainMenu { visibility: hidden; }
 footer { visibility: hidden; }
-[data-testid="stToolbar"] { display: none; }
 
-/* Hide header content but keep the header bar so toggle works */
+/* Style the header bar to match dark theme */
 header[data-testid="stHeader"] {
     background: #0a0a0f !important;
-    border-bottom: 1px solid #1e1e2e !important;
-    height: 3rem !important;
+    border-bottom: 1px solid #1a1a2e !important;
 }
 
-/* Hide everything inside header EXCEPT the sidebar toggle */
-header[data-testid="stHeader"] > div:first-child {
-    visibility: hidden !important;
-}
-
-/* Make sidebar toggle button styled and visible */
-[data-testid="stSidebarNavItems"],
-button[data-testid="baseButton-header"],
+/* Style sidebar toggle arrow button */
 [data-testid="collapsedControl"] {
-    visibility: visible !important;
-    opacity: 1 !important;
-    color: #a5b4fc !important;
-    background: transparent !important;
-    border: none !important;
-}
-[data-testid="collapsedControl"] {
-    background: #13131f !important;
-    border: 1px solid #2d2d50 !important;
-    border-radius: 0 8px 8px 0 !important;
-}
-[data-testid="collapsedControl"]:hover {
-    background: #1e1e3a !important;
-    border-color: #6366f1 !important;
+    background-color: #13131f !important;
+    border-right: 1px solid #2d2d50 !important;
+    border-bottom: 1px solid #2d2d50 !important;
 }
 [data-testid="collapsedControl"] svg {
     fill: #a5b4fc !important;
