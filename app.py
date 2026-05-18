@@ -42,23 +42,34 @@ html, body, [data-testid="stAppViewContainer"] {
 [data-testid="stToolbar"] { display: none; }
 header { visibility: hidden; }
 
-/* ── Keep sidebar collapse/expand toggle visible ── */
-[data-testid="collapsedControl"] {
+/* ── Sidebar toggle button — always visible ── */
+[data-testid="collapsedControl"],
+section[data-testid="stSidebar"] > div > button,
+button[data-testid="baseButton-header"] {
     visibility: visible !important;
     display: flex !important;
-    background: #13131f !important;
-    border: 1px solid #1e1e2e !important;
-    border-radius: 0 8px 8px 0 !important;
-    color: #a5b4fc !important;
-    top: 50% !important;
-}
-[data-testid="collapsedControl"]:hover {
+    opacity: 1 !important;
+    pointer-events: all !important;
+    z-index: 9999 !important;
     background: #1e1e2e !important;
-    border-color: #4f46e5 !important;
+    border: 1px solid #4f46e5 !important;
+    border-radius: 0 10px 10px 0 !important;
+    padding: 12px 6px !important;
+    position: fixed !important;
+    left: 0 !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
 }
-[data-testid="collapsedControl"] svg {
+[data-testid="collapsedControl"] svg,
+section[data-testid="stSidebar"] > div > button svg {
     fill: #a5b4fc !important;
     stroke: #a5b4fc !important;
+    color: #a5b4fc !important;
+    width: 16px !important;
+    height: 16px !important;
+}
+[data-testid="collapsedControl"]:hover {
+    background: #4f46e5 !important;
 }
 
 /* ── Main header ── */
