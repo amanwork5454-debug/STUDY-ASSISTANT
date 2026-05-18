@@ -37,39 +37,44 @@ html, body, [data-testid="stAppViewContainer"] {
     border-right: 1px solid #1e1e2e !important;
 }
 
-/* ── Hide Streamlit chrome but keep sidebar toggle ── */
-#MainMenu, footer { visibility: hidden; }
+/* ── Hide Streamlit chrome — keep header visible for sidebar toggle ── */
+#MainMenu { visibility: hidden; }
+footer { visibility: hidden; }
 [data-testid="stToolbar"] { display: none; }
-header { visibility: hidden; }
 
-/* ── Sidebar toggle button — always visible ── */
-[data-testid="collapsedControl"],
-section[data-testid="stSidebar"] > div > button,
-button[data-testid="baseButton-header"] {
-    visibility: visible !important;
-    display: flex !important;
-    opacity: 1 !important;
-    pointer-events: all !important;
-    z-index: 9999 !important;
-    background: #1e1e2e !important;
-    border: 1px solid #4f46e5 !important;
-    border-radius: 0 10px 10px 0 !important;
-    padding: 12px 6px !important;
-    position: fixed !important;
-    left: 0 !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
+/* Hide header content but keep the header bar so toggle works */
+header[data-testid="stHeader"] {
+    background: #0a0a0f !important;
+    border-bottom: 1px solid #1e1e2e !important;
+    height: 3rem !important;
 }
-[data-testid="collapsedControl"] svg,
-section[data-testid="stSidebar"] > div > button svg {
-    fill: #a5b4fc !important;
-    stroke: #a5b4fc !important;
+
+/* Hide everything inside header EXCEPT the sidebar toggle */
+header[data-testid="stHeader"] > div:first-child {
+    visibility: hidden !important;
+}
+
+/* Make sidebar toggle button styled and visible */
+[data-testid="stSidebarNavItems"],
+button[data-testid="baseButton-header"],
+[data-testid="collapsedControl"] {
+    visibility: visible !important;
+    opacity: 1 !important;
     color: #a5b4fc !important;
-    width: 16px !important;
-    height: 16px !important;
+    background: transparent !important;
+    border: none !important;
+}
+[data-testid="collapsedControl"] {
+    background: #13131f !important;
+    border: 1px solid #2d2d50 !important;
+    border-radius: 0 8px 8px 0 !important;
 }
 [data-testid="collapsedControl"]:hover {
-    background: #4f46e5 !important;
+    background: #1e1e3a !important;
+    border-color: #6366f1 !important;
+}
+[data-testid="collapsedControl"] svg {
+    fill: #a5b4fc !important;
 }
 
 /* ── Main header ── */
