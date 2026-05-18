@@ -37,9 +37,29 @@ html, body, [data-testid="stAppViewContainer"] {
     border-right: 1px solid #1e1e2e !important;
 }
 
-/* ── Hide Streamlit chrome ── */
-#MainMenu, footer, header { visibility: hidden; }
+/* ── Hide Streamlit chrome but keep sidebar toggle ── */
+#MainMenu, footer { visibility: hidden; }
 [data-testid="stToolbar"] { display: none; }
+header { visibility: hidden; }
+
+/* ── Keep sidebar collapse/expand toggle visible ── */
+[data-testid="collapsedControl"] {
+    visibility: visible !important;
+    display: flex !important;
+    background: #13131f !important;
+    border: 1px solid #1e1e2e !important;
+    border-radius: 0 8px 8px 0 !important;
+    color: #a5b4fc !important;
+    top: 50% !important;
+}
+[data-testid="collapsedControl"]:hover {
+    background: #1e1e2e !important;
+    border-color: #4f46e5 !important;
+}
+[data-testid="collapsedControl"] svg {
+    fill: #a5b4fc !important;
+    stroke: #a5b4fc !important;
+}
 
 /* ── Main header ── */
 .hero {
@@ -208,7 +228,8 @@ html, body, [data-testid="stAppViewContainer"] {
 /* ── Buttons ── */
 .stButton > button {
     background: linear-gradient(135deg, #4f46e5, #6366f1) !important;
-    color: white !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
     border: none !important;
     border-radius: 10px !important;
     font-family: 'DM Sans', sans-serif !important;
@@ -226,13 +247,16 @@ html, body, [data-testid="stAppViewContainer"] {
 
 /* ── Clear button override ── */
 .clear-btn .stButton > button {
-    background: #13131f !important;
-    border: 1px solid #1e1e2e !important;
-    color: #6b7280 !important;
+    background: #1a1a2e !important;
+    border: 1px solid #2d2d44 !important;
+    color: #9ca3af !important;
+    -webkit-text-fill-color: #9ca3af !important;
 }
 .clear-btn .stButton > button:hover {
+    background: #1f0a0a !important;
     border-color: #ef4444 !important;
     color: #ef4444 !important;
+    -webkit-text-fill-color: #ef4444 !important;
 }
 
 /* ── Status messages ── */
