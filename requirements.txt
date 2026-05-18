@@ -6,5 +6,4 @@ langchain-cohere
 faiss-cpu==1.13.0
 PyPDF2
 python-dotenv
-numpy
 cohere
